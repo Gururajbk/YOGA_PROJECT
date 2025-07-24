@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TutorBot - AI Tutor</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(45deg, #667eea, #764ba2); 
+            margin: 0; 
+            padding: 20px;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 15px; 
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .header { 
+            background: #667eea; 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+        }
+        .chat { 
+            height: 400px; 
+            overflow-y: auto; 
+            padding: 20px; 
+            background: #f5f5f5; 
+        }
+        .message { 
+            margin: 10px 0; 
+            padding: 10px 15px; 
+            border-radius: 15px; 
+            max-width: 80%; 
+        }
+        .bot { 
+            background: #e3f2fd; 
+            color: #1976d2; 
+            margin-right: 20%; 
+        }
+        .user { 
+            background: #667eea; 
+            color: white; 
+            margin-left: 20%; 
+        }
+        .input-area { 
+            padding: 20px; 
+            background: white; 
+        }
+        .topics { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 15px; 
+            flex-wrap: wrap; 
+        }
+        .topic-btn { 
+            background: #f0f0f0; 
+            border: none; 
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+        }
+        .topic-btn:hover { 
+            background: #667eea; 
+            color: white; 
+        }
+        .input-row { 
+            display: flex; 
+            gap: 10px; 
+        }
+        .text-input { 
+            flex: 1; 
+            border: 2px solid #ddd; 
+            border-radius: 25px; 
+            padding: 10px 15px; 
+            font-size: 16px; 
+        }
+        .btn { 
+            width: 50px; 
+            height: 50px; 
+            border: none; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            font-size: 18px; 
+        }
+        .voice-btn { 
+            background: #ff6b6b; 
+            color: white; 
+        }
+        .send-btn { 
+            background: #667eea; 
+            color: white; 
+        }
+        .status { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            padding: 10px 20px; 
+            background: #4caf50; 
+            color: white; 
+            border-radius: 5px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 TutorBot</h1>
+            <p>Your Personal AI Tutor</p>
+        </div>
+        
+        <div class="chat" id="chat">
+            <div class="message bot">
+                🤖 Hello! I'm TutorBot, your personal AI tutor. Ask me anything about any subject - I can help with math, science, history, language, and more! You can type or speak your questions.
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <div class="topics">
+                <button class="topic-btn" onclick="ask('Explain photosynthesis')">🌱 Photosynthesis</button>
+                <button class="topic-btn" onclick="ask('Help with algebra')">🔢 Algebra</button>
+                <button class="topic-btn" onclick="ask('Grammar rules')">📝 Grammar</button>
+                <button class="topic-btn" onclick="ask('Tell me about history')">🏛️ History</button>
+            </div>
+            
+            <div class="input-row">
+                <input type="text" class="text-input" id="input" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter') send()">
+                <button class="btn voice-btn" onclick="startVoice()">🎤</button>
+                <button class="btn send-btn" onclick="send()">📤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let recognition = null;
+        let isListening = false;
+
+        // Initialize voice recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onresult = function(event) {
+                const text = event.results[0][0].transcript;
+                document.getElementById('input').value = text;
+                send();
+            };
+            
+            recognition.onstart = function() {
+                showStatus('🎤 Listening... speak now!');
+            };
+            
+            recognition.onend = function() {
+                isListening = false;
+            };
+        }
+
+        function startVoice() {
+            if (recognition && !isListening) {
+                isListening = true;
+                recognition.start();
+            } else {
+                showStatus('❌ Voice not supported in this browser');
+            }
+        }
+
+        function ask(question) {
+            document.getElementById('input').value = question;
+            send();
+        }
+
+        function send() {
+            const input = document.getElementById('input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+
+            setTimeout(() => {
+                const response = getResponse(text);
+                addMessage(response, 'bot');
+                speak(response);
+            }, 1000);
+        }
+
+        function addMessage(text, type) {
+            const chat = document.getElementById('chat');
+            const msg = document.createElement('div');
+            msg.className = 'message ' + type;
+            msg.innerHTML = (type === 'bot' ? '🤖 ' : '👤 ') + text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function getResponse(question) {
+            const q = question.toLowerCase();
+            
+            if (q.includes('photosynthesis')) {
+                return "Photosynthesis is how plants make food using sunlight! Plants take in carbon dioxide from air and water from roots, then use sunlight to combine them into glucose (sugar) and release oxygen. The equation is: CO₂ + H₂O + sunlight → glucose + O₂. This process happens in chloroplasts and is vital for all life on Earth!";
+            }
+            
+            if (q.includes('algebra')) {
+                return "Algebra uses letters (variables) to represent unknown numbers! For example, in 'x + 5 = 12', we solve for x by subtracting 5 from both sides: x = 7. Key rules: (1) What you do to one side, do to the other (2) Use opposite operations (3) Isolate the variable. Think of it like a balance scale!";
+            }
+            
+            if (q.includes('grammar')) {
+                return "Grammar is the rules for language! Basic parts: (1) Nouns (people, places, things) (2) Verbs (action words) (3) Adjectives (describing words) (4) Adverbs (describe verbs). Sentences need a subject and predicate. Punctuation: periods end sentences, commas separate ideas, question marks ask questions!";
+            }
+            
+            if (q.includes('history')) {
+                return "History tells the story of humanity! Major periods: Ancient (Egypt, Greece, Rome), Medieval (knights, castles), Renaissance (art, science), Industrial Revolution (machines), Modern era (world wars, technology). History shows us patterns of how societies develop, how people solve problems, and how ideas spread across cultures!";
+            }
+            
+            return "Great question! I'm here to help you learn. Could you tell me more specifically what you'd like to understand? I can explain concepts step-by-step, give examples, or help with homework. What subject interests you most?";
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function showStatus(message) {
+            const existing = document.querySelector('.status');
+            if (existing) existing.remove();
+            
+            const status = document.createElement('div');
+            status.className = 'status';
+            status.textContent = message;
+            document.body.appendChild(status);
+            
+            setTimeout(() => status.remove(), 3000);
+        }
+
+        // Welcome message
+        window.onload = function() {
+            showStatus('🎓 TutorBot ready! Ask me anything!');
+        };
+    </script>
+</body>
+</html>
