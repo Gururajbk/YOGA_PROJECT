@@ -1,201 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>YogaSanskriti.com</title>
+    <title>TutorBot - Your Personal AI Tutor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    
-    <div class="container">
-      <div class="header">
-        <img src="./assest/logo.png" alt="Yoga logo">
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#" id="eventLink">Event</a></li>
-          <li><a href="#" onclick="scrollToPricing()">Price</a></li>
-          <li><a href="#" id="aboutLink">About</a></li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="content">     
-      <div class =" summry">
-        <h1 id="originalHeading">Empower  <span>Your Journey </span>  <br>
-          to Well-Being.
-          <div id="dynamicHeading"></div>
-        </h1>
-        <p>"Embark on a journey of self-discovery at YogaSanskriti.com,   <br>
-          Immerse yourself in the serenity of mindful practices, guided by  <br>
-          expert instructors. Elevate your well-being, one breath at a time."</p>
-          <!-- Update your button in HTML -->
-          <button id="registerBtn" onclick="scrollToRegistration()">Register Today</button>
-          
-          <img id="people" src="./assest/people.png" alt="review">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>TutorBot</h1>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#subjects">Subjects</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+                <span>Student</span>
+            </div>
         </div>
-        <img src="./assest/YOGA MODEL.png" alt="Yoga pose">
-        
-      </div>
-      
+    </header>
 
-              <div class="SecondContainer">
-                <!-- Create the first section -->
-                <div class="SecondSection">
-                  <img src="./assest/1st.png" alt="Stretching icon" class="section-icon">
-                  <div class="section-content">
-                    <h2 class="section-heading">What is this Course?</h2>
-                    <p class="section-text">The course, akin to a yoga class, is a guided program <br>
-                        focused on imparting knowledge and practical skills <br>
-                        related to yoga practice. It typically includes instruction <br>
-                         on various yoga asanas (poses), breathing techniques,  <br>
-                        and possibly meditation practices. Participants engage <br>
-                         in a systematic learning experience aimed at enhancing <br>
-                         their understanding of yoga principles and fostering  <br>
-                        a holistic approach to well-being.</p>
-                  </div>
-                </div>
-                <!-- Create the second section -->
-                <div class="SecondSection">
-                  <div class="section-content">
-                    <h2 class="section-heading">Who should Join?</h2>
-                    <p class="section-text">Yoga courses are suitable for individuals of all <br>
-                      fitness levels and ages, welcoming beginners <br>
-                      seeking a holistic approach to well-being. <br>
-                      Those aiming to deepen their practice or aspiring  <br>
-                      yoga instructors can benefit from specialized courses <br>
-                      tailored to their goals. Whether seeking stress relief,  <br>
-                      increased flexibility, or a mindful lifestyle, yoga courses <br>
-                      provide a versatile and inclusive environment.</p>
+    <!-- Main Chat Container -->
+    <main class="main-container" id="home">
+        <div class="chat-container">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="tutor-info">
+                    <div class="tutor-avatar">
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <img src="./assest/2nd.png" alt="Yoga icon" class="section-icon">
+                    <div class="tutor-details">
+                        <h3>AI Tutor</h3>
+                        <span class="status">Online</span>
+                    </div>
                 </div>
-                <!-- Create the third section -->
-                <div class="SecondSection">
-                  <img src="./assest/3rd.png" alt="Pose icon" class="section-icon">
-                  <div class="section-content">
-                    <h2 class="section-heading">Prepare Yourself for the Future</h2>
-                    <p class="section-text">Prepare yourself for the future by cultivating a <br>
-                        continuous learning mindset, staying adaptable <br>
-                        to new technologies and trends, and honing essential <br>
-                        skills like critical thinking and problem-solving. <br>
-                        Embrace opportunities for personal and professional <br>
-                        development to navigate the evolving landscape successfully. <br>
-                        By fostering resilience and adaptability, you'll be better <br>
-                        equipped to thrive in an ever-changing future.</p>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="pricing-container" id="pricing-section">
-                <div class="pricing-plan">
-                    <h2>Basic</h2>
-                    <p class="price">$9.99/month</p>
-                    <ul>
-                        <li>Access to basic classes</li>
-                        <li>Community support</li>
-                        <li>Monthly newsletter</li>
-                    </ul>
-                    <button>Select Plan</button>
-                </div>
-        
-                <div class="pricing-plan">
-                    <h2>Premium</h2>
-                    <p class="price">$19.99/month</p>
-                    <ul>
-                        <li>Access to all classes</li>
-                        <li>Personalized coaching</li>
-                        <li>Exclusive events</li>
-                    </ul>
-                    <button>Select Plan</button>
-                </div>
-        
-                <div class="pricing-plan">
-                    <h2>Pro</h2>
-                    <p class="price">$29.99/month</p>
-                    <ul>
-                        <li>Unlimited access</li>
-                        <li>1-on-1 sessions</li>
-                        <li>Customized plans</li>
-                    </ul>
-                    <button>Select Plan</button>
+                <div class="chat-controls">
+                    <button class="btn-control" id="clearChat" title="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn-control" id="toggleTheme" title="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
             </div>
 
+            <!-- Chat Messages Area -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your personal AI tutor. I'm here to help you learn and answer any questions you have. You can type your questions or use voice input by clicking the microphone button. What would you like to learn today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
 
-            <div class="about-section" id="about-section">
-              <div class="about-content">
-                <h2>About Us</h2>
-                <p>We are dedicated to providing a holistic approach to well-being through yoga and mindfulness practices. Our expert instructors are committed to guiding you on your journey of self-discovery, helping you elevate your physical, mental, and spiritual health.</p>
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-container">
+                <div class="quick-questions">
+                    <button class="quick-btn" onclick="sendQuickQuestion('Explain photosynthesis')">
+                        <i class="fas fa-leaf"></i> Photosynthesis
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Help with algebra')">
+                        <i class="fas fa-calculator"></i> Algebra
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Grammar rules')">
+                        <i class="fas fa-book"></i> Grammar
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('History facts')">
+                        <i class="fas fa-monument"></i> History
+                    </button>
+                </div>
                 
-              </div>
-            </div>
-
-
-            <div class="event-section">
-              <h2 style="text-align: center;">Upcoming Events</h2>
-              <div class="event-container">
-                <div class="event-item">
-                  <h3>Event 1</h3>
-                  <p>Description of event 1 goes here.</p>
-                </div>
-                <div class="event-item">
-                  <h3>Event 2</h3>
-                  <p>Description of event 2 goes here.</p>
-                </div>
-                <div class="event-item">
-                  <h3>Event 3</h3>
-                  <p>Description of event 3 goes here.</p>
-                </div>
-              </div>
-            </div>
-
-
-
-              <div class="registration">
-                <form id="registrationForm" onsubmit="validateForm(event)">
-                    <h2>Registration Form</h2>
+                <div class="input-area">
+                    <div class="file-upload">
+                        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx" style="display: none;">
+                        <button class="btn-attachment" onclick="document.getElementById('fileInput').click()" title="Attach File">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                    </div>
                     
-                    <label for="fullName">Full Name:</label>
-                    <input type="text" id="fullName" name="fullName" required>
+                    <div class="text-input-container">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type your question here or click the mic to speak..."
+                            rows="1"
+                            maxlength="1000"
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/1000
+                        </div>
+                    </div>
                     
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
+                    <div class="voice-controls">
+                        <button class="btn-voice" id="voiceBtn" title="Voice Input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <div class="voice-indicator" id="voiceIndicator" style="display: none;">
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                            <div class="voice-wave"></div>
+                        </div>
+                    </div>
                     
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                    
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                    
-                    <button type="submit">Register</button>
-                </form>
-            </div>
-
-
-            <button id="help-button" onclick="togglePopup()">Need Help?</button>
-
-            <!-- The popup help section -->
-            <div id="help-popup" class="popup">
-                <div class="popup-content">
-                    <button id="close-button" onclick="togglePopup()">&times;</button>
-                    <h3>Contact Us</h3>
-                    <p>If you want to connect immediately, fill out the form.</p>
-                    <label for="fullName">Full Name:</label>
-                    <br><input type="text" id="fullName" name="fullName" required> <br>
-                    <label for="email">Email:</label>
-                    <br><input type="email" id="email" name="email" required> <br>
-                    <label for="number">Number:</label>
-                    <br><input type="number" id="number" name="number" required> <br>
-                    <button id="submit" onclick="submitForm()">Submit</button>
+                    <button class="btn-send" id="sendBtn" title="Send Message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
-            
+        </div>
 
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-history"></i> Recent Chats</h3>
+                <div class="recent-chats">
+                    <div class="chat-item">
+                        <div class="chat-preview">
+                            <h4>Math Help Session</h4>
+                            <p>Quadratic equations and graphs...</p>
+                        </div>
+                        <span class="chat-time">2 hours ago</span>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-preview">
+                            <h4>Science Questions</h4>
+                            <p>Photosynthesis process...</p>
+                        </div>
+                        <span class="chat-time">Yesterday</span>
+                    </div>
+                </div>
+            </div>
 
+            <div class="sidebar-section">
+                <h3><i class="fas fa-book-open"></i> Study Materials</h3>
+                <div class="study-materials">
+                    <a href="#" class="material-link">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Math Formulas</span>
+                    </a>
+                    <a href="#" class="material-link">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Grammar Guide</span>
+                    </a>
+                    <a href="#" class="material-link">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress Report</span>
+                    </a>
+                </div>
+            </div>
 
+            <div class="sidebar-section">
+                <h3><i class="fas fa-cog"></i> Settings</h3>
+                <div class="settings">
+                    <label class="setting-item">
+                        <input type="checkbox" id="voiceResponse" checked>
+                        <span>Voice Responses</span>
+                    </label>
+                    <label class="setting-item">
+                        <input type="checkbox" id="notifications" checked>
+                        <span>Notifications</span>
+                    </label>
+                    <label class="setting-item">
+                        <span>Language:</span>
+                        <select id="languageSelect">
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2>Why Choose TutorBot?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Learning</h3>
+                    <p>Advanced AI technology that adapts to your learning style and provides personalized explanations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h3>Voice Interaction</h3>
+                    <p>Speak naturally and get instant responses. Perfect for auditory learners and hands-free studying.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>24/7 Availability</h3>
+                    <p>Study anytime, anywhere. Your AI tutor is always ready to help, no scheduling required.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor your learning journey with detailed analytics and personalized study recommendations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Section -->
+    <section class="subjects-section" id="subjects">
+        <div class="container">
+            <h2>Subjects We Cover</h2>
+            <div class="subjects-grid">
+                <div class="subject-card">
+                    <i class="fas fa-calculator"></i>
+                    <h3>Mathematics</h3>
+                    <p>Algebra, Geometry, Calculus, Statistics</p>
+                </div>
+                <div class="subject-card">
+                    <i class="fas fa-flask"></i>
+                    <h3>Science</h3>
+                    <p>Physics, Chemistry, Biology, Earth Science</p>
+                </div>
+                <div class="subject-card">
+                    <i class="fas fa-book"></i>
+                    <h3>English</h3>
+                    <p>Grammar, Literature, Writing, Reading Comprehension</p>
+                </div>
+                <div class="subject-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Social Studies</h3>
+                    <p>History, Geography, Civics, Economics</p>
+                </div>
+                <div class="subject-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Programming</h3>
+                    <p>Python, JavaScript, HTML/CSS, Algorithms</p>
+                </div>
+                <div class="subject-card">
+                    <i class="fas fa-language"></i>
+                    <h3>Languages</h3>
+                    <p>Spanish, French, German, Mandarin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <h2>About TutorBot</h2>
+                <p>TutorBot is an advanced AI-powered tutoring platform designed to provide personalized learning experiences for students of all ages. Our cutting-edge technology combines natural language processing with educational expertise to create an interactive and engaging learning environment.</p>
+                <div class="stats">
+                    <div class="stat">
+                        <h3>10,000+</h3>
+                        <p>Students Helped</p>
+                    </div>
+                    <div class="stat">
+                        <h3>50+</h3>
+                        <p>Subjects Covered</p>
+                    </div>
+                    <div class="stat">
+                        <h3>99.5%</h3>
+                        <p>Satisfaction Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TutorBot</h3>
+                    <p>Your personal AI tutor for better learning outcomes.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#subjects">Subjects</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TutorBot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Script.js"></script>
 </body>
-<script src="./Script.js"></script>
 </html>
