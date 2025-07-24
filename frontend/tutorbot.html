@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TutorBot - Your Personal AI Tutor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4ade80;
+            --warning-color: #fbbf24;
+            --error-color: #f87171;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+        }
+
+        .tutor-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tutor-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .tutor-details h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status {
+            font-size: 0.875rem;
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-control {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-control:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bot-message .message-avatar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .user-message {
+            flex-direction: row-reverse;
+        }
+
+        .user-message .message-avatar {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: var(--bg-secondary);
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .message-content p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            opacity: 0.7;
+        }
+
+        .user-message .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            padding: 1rem 1.25rem;
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: var(--text-light);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .quick-questions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .text-input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .text-input-container textarea {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            min-height: 50px;
+            max-height: 120px;
+        }
+
+        .text-input-container textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: 0.5rem;
+            right: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .btn-voice,
+        .btn-send {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .btn-voice {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .btn-voice:hover,
+        .btn-voice.recording {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-send {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .quick-questions {
+                flex-direction: column;
+            }
+            
+            .quick-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 400px;
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+        }
+        .notification-error { border-left: 4px solid #f87171; }
+        .notification-success { border-left: 4px solid #4ade80; }
+        .notification-info { border-left: 4px solid #667eea; }
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .notification-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: #64748b;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <h1>TutorBot</h1>
+        </div>
+        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+            <i class="fas fa-user-circle" style="margin-right: 0.5rem;"></i>
+            Student
+        </div>
+    </header>
+
+    <!-- Main Chat Container -->
+    <main class="main-container">
+        <div class="chat-container">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="tutor-info">
+                    <div class="tutor-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="tutor-details">
+                        <h3>AI Tutor</h3>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+                <div class="chat-controls">
+                    <button class="btn-control" id="clearChat" title="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your personal AI tutor. I'm here to help you learn and answer any questions you have. You can type your questions or use voice input by clicking the microphone button. What would you like to learn today?</p>
+                        <span class="message-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-container">
+                <div class="quick-questions">
+                    <button class="quick-btn" onclick="sendQuickQuestion('Explain photosynthesis')">
+                        <i class="fas fa-leaf"></i> Photosynthesis
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Help with algebra')">
+                        <i class="fas fa-calculator"></i> Algebra
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('Grammar rules')">
+                        <i class="fas fa-book"></i> Grammar
+                    </button>
+                    <button class="quick-btn" onclick="sendQuickQuestion('History facts')">
+                        <i class="fas fa-monument"></i> History
+                    </button>
+                </div>
+                
+                <div class="input-area">
+                    <div class="text-input-container">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type your question here or click the mic to speak..."
+                            rows="1"
+                            maxlength="1000"
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/1000
+                        </div>
+                    </div>
+                    
+                    <button class="btn-voice" id="voiceBtn" title="Voice Input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    
+                    <button class="btn-send" id="sendBtn" title="Send Message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let isRecording = false;
+        let recognition = null;
+        let speechSynthesis = window.speechSynthesis;
+        let currentVoice = null;
+
+        // DOM elements
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const charCount = document.getElementById('charCount');
+        const clearChatBtn = document.getElementById('clearChat');
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSpeechRecognition();
+            initializeTextToSpeech();
+            setupEventListeners();
+            adjustTextareaHeight();
+            showNotification('TutorBot is ready! Try asking a question or click the quick buttons.', 'success');
+        });
+
+        // Initialize Speech Recognition
+        function initializeSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                recognition.continuous = false;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+                
+                recognition.onstart = function() {
+                    isRecording = true;
+                    voiceBtn.classList.add('recording');
+                    voiceBtn.querySelector('i').className = 'fas fa-stop';
+                    showNotification('Listening... Speak now!', 'info');
+                };
+                
+                recognition.onend = function() {
+                    isRecording = false;
+                    voiceBtn.classList.remove('recording');
+                    voiceBtn.querySelector('i').className = 'fas fa-microphone';
+                };
+                
+                recognition.onresult = function(event) {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript;
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+                    
+                    if (finalTranscript) {
+                        messageInput.value = finalTranscript;
+                        updateCharCounter();
+                        sendMessage();
+                    } else {
+                        messageInput.value = interimTranscript;
+                        updateCharCounter();
+                    }
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    showNotification('Speech recognition error. Please try again.', 'error');
+                };
+            } else {
+                voiceBtn.style.display = 'none';
+                console.warn('Speech recognition not supported in this browser.');
+                showNotification('Voice input not supported in this browser. Use Chrome for best experience.', 'error');
+            }
+        }
+
+        // Initialize Text-to-Speech
+        function initializeTextToSpeech() {
+            if ('speechSynthesis' in window) {
+                speechSynthesis.onvoiceschanged = function() {
+                    const voices = speechSynthesis.getVoices();
+                    currentVoice = voices.find(voice => voice.lang.includes('en')) || voices[0];
+                };
+            }
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Send button
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Enter key to send message
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                adjustTextareaHeight();
+                updateCharCounter();
+            });
+            
+            // Voice button
+            voiceBtn.addEventListener('click', toggleVoiceRecording);
+            
+            // Clear chat button
+            clearChatBtn.addEventListener('click', clearChat);
+        }
+
+        // Send Message Function
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Clear input
+            messageInput.value = '';
+            updateCharCounter();
+            adjustTextareaHeight();
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateAIResponse(message);
+                addMessage(response, 'bot');
+                
+                // Text-to-speech for bot response
+                speakText(response);
+            }, 1000 + Math.random() * 2000);
+        }
+
+        // Quick Question Function
+        function sendQuickQuestion(question) {
+            messageInput.value = question;
+            updateCharCounter();
+            sendMessage();
+        }
+
+        // Add Message to Chat
+        function addMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.innerHTML = sender === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            
+            const timestamp = document.createElement('span');
+            timestamp.className = 'message-time';
+            timestamp.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            content.appendChild(messageText);
+            content.appendChild(timestamp);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Generate AI Response
+        function generateAIResponse(userMessage) {
+            const responses = {
+                'photosynthesis': 'Photosynthesis is the process by which plants convert light energy into chemical energy. It occurs in chloroplasts and involves two main stages: the light-dependent reactions and the Calvin cycle. During this process, plants absorb carbon dioxide from the air and water from the soil, using sunlight to produce glucose and oxygen.',
+                'algebra': 'Algebra is a branch of mathematics that uses symbols and letters to represent numbers and quantities in formulas and equations. Key concepts include variables, coefficients, expressions, and equations. Would you like help with a specific algebra problem or concept?',
+                'grammar': 'Grammar is the set of structural rules governing the composition of clauses, phrases, and words in a language. Key components include parts of speech (nouns, verbs, adjectives, etc.), sentence structure, punctuation, and syntax. What specific grammar topic would you like to explore?',
+                'history': 'History is the study of past events, particularly in human affairs. It helps us understand how societies, cultures, and civilizations have developed over time. What specific historical period or event would you like to learn about?'
+            };
+            
+            const lowerMessage = userMessage.toLowerCase();
+            
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerMessage.includes(key)) {
+                    return response;
+                }
+            }
+            
+            // Default responses
+            const defaultResponses = [
+                "That's an interesting question! Let me help you understand this concept better. Could you provide more specific details about what you'd like to learn?",
+                "I'd be happy to help you with that topic. Can you tell me more about what specific aspect you're struggling with?",
+                "Great question! This is an important concept to understand. Let me break it down for you step by step.",
+                "I can definitely help you with that. Would you like me to explain the basics first, or do you have a specific problem you're working on?",
+                "That's a topic I love discussing! What would you like to know specifically? I can provide examples and explanations to help you understand better."
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Voice Recording Functions
+        function toggleVoiceRecording() {
+            if (!recognition) {
+                showNotification('Speech recognition not supported in this browser.', 'error');
+                return;
+            }
+            
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        // Text-to-Speech Function
+        function speakText(text) {
+            if ('speechSynthesis' in window && currentVoice) {
+                speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = currentVoice;
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+                
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Typing Indicator Functions
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+
+        // Utility Functions
+        function adjustTextareaHeight() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+        }
+
+        function updateCharCounter() {
+            const count = messageInput.value.length;
+            charCount.textContent = count;
+            charCount.style.color = count > 800 ? '#f87171' : count > 600 ? '#fbbf24' : '#94a3b8';
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function clearChat() {
+            if (confirm('Are you sure you want to clear the chat history?')) {
+                chatMessages.innerHTML = `
+                    <div class="message bot-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your personal AI tutor. I'm here to help you learn and answer any questions you have. You can type your questions or use voice input by clicking the microphone button. What would you like to learn today?</p>
+                            <span class="message-time">Just now</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                sendMessage();
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                messageInput.focus();
+            }
+            
+            if (e.key === 'Escape' && 'speechSynthesis' in window) {
+                speechSynthesis.cancel();
+            }
+        });
+    </script>
+</body>
+</html>
